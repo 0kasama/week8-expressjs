@@ -11,9 +11,10 @@ app.get("/film", (req, res) => {
   });
 });
 
-app.get("/film/id", (req, res) => {
+app.get("/film/:id", (req, res) => {
+  const {id} = req.params;
   pool.query(
-    "SELECT film_id, title FROM film order by film_id asc",
+    "SELECT film_id, title FROM film WHERE film_id = $1", [1],
     (err, result) => {
       if (err) {
         throw err;
@@ -32,9 +33,10 @@ app.get("/film/category", (req, res) => {
   });
 });
 
-app.get("/category", (req, res) => {
+app.get("/category/:id", (req, res) => {
+  const {id} = req.params;
   pool.query(
-    "SELECT film_id, title, name FROM film INNER JOIN category ON film.film_id = category.category_id",
+    "SELECT film_id, title, name FROM film INNER JOIN category ON film.film_id = category.film_id WHERE category.category_id = $1", [id],
     (err, result) => {
       if (err) {
         throw err;
